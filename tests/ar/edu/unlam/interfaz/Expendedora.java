@@ -7,6 +7,7 @@ import ar.edu.unlam.bebida.BebidaBase;
 import ar.edu.unlam.bebida.Cola;
 import ar.edu.unlam.bebida.Limon;
 import ar.edu.unlam.bebida.Naranja;
+import ar.edu.unlam.bebida.exceptions.BebidaNoDisponibleException;
 import ar.edu.unlam.bebida.interfaces.*;
 
 public class Expendedora {
@@ -37,40 +38,50 @@ public class Expendedora {
 		while (opcion != 0) {
 			System.out.println("Seleccione una bebida: \n 1-Coca\n 2-Limonada \n 3 fanta \n 0-Salir del Sistema");
 			opcion = teclado.nextInt();
-			switch (opcion) {
-			case 1:
-				if (stock.contains(coca) && ((BebidaBase) coca).getStock() > 0) {
-					coca.dispensar();
+			try {
+				switch (opcion) {
+				case 1:
+					if (stock.contains(coca) && ((BebidaBase) coca).getStock() > 0)
+						coca.dispensar();
+
+					else {
+//						System.out.println("\n***Bebida no disponible***");
+						throw new BebidaNoDisponibleException("Coca Cola Sin Stock ");
+					}
+
+					break;
+				case 2:
+					if (stock.contains(limonada) && limonada.getStock() > 0)
+						limonada.dispensar();
+					else {
+//						System.out.println("Bebida no disponible");
+						throw new BebidaNoDisponibleException("Limonada Sin Stock ");
+
+					}
+
+					break;
+				case 3:
+					if (stock.contains(fanta) && fanta.getStock() > 0)
+						fanta.dispensar();
+					else
+//						System.out.println("Bebida no disponible");
+						throw new BebidaNoDisponibleException("fanta Sin Stock ");
+
+					break;
+				case 0:
+					System.out.println("Adios!");
+					break;
+
+				default:
+					System.out.println("Opcion incorrecta.Vuelva a ingresar la opcion deseada");
+					break;
 				}
-
-				else {
-					System.out.println("\n***Bebida no disponible***");
-				}
-
-				break;
-			case 2:
-				if (stock.contains(limonada) && limonada.getStock() > 0)
-					limonada.dispensar();
-				else
-					System.out.println("Bebida no disponible");
-
-				break;
-			case 3:
-				if (stock.contains(fanta) && fanta.getStock() > 0)
-					fanta.dispensar();
-				else
-					System.out.println("Bebida no disponible");
-
-				break;
-			case 0:
-				System.out.println("Adios!");
-				break;
-
-			default:
-				System.out.println("Opcion incorrecta.Vuelva a ingresar la opcion deseada");
-				break;
+			} catch (BebidaNoDisponibleException e) {
+				System.out.println(e.getMessage());
 			}
+
 		}
+		teclado.close();
 
 	}
 
